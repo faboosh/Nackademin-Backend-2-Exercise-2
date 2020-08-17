@@ -26,7 +26,7 @@ const Post = mongoose.model('post', {
 });
 
 const Comment = mongoose.model('comment', {
-    comment: String,
+    text: String,
 });
 
 /**
@@ -71,19 +71,21 @@ app.post('/addComment/:postId', (req, res) => {
             res.status(500).json(err);
             return;
         }
-        Comment.create(req.body.comment, (err, commentDoc) => {
+
+        Comment.create(req.body, (err, commentDoc) => {
             if (err) {
                 res.status(500).json(err);
                 return;
             }
-            commentDoc.comments = req.body.comment;
+            commentDoc.text = req.body.text;
             commentDoc.save();
             postDoc.comments.push(commentDoc);
             postDoc.save();
-            res.status(201).json(postDoc);
+            res.status(201).json(commentDoc);
         });
     });
 });
+
 
 
 
