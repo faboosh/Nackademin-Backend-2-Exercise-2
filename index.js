@@ -48,6 +48,16 @@ app.put('/updatePost/:postId', (req, res) => {
     });
 });
 
+app.delete('/deletePost/:postId', (req, res) => {
+   Post.deleteOne({_id: req.params.postId}, (err, doc) => {
+       if (err) {
+           res.status(500).json(err);
+           return;
+       }
+       res.status(200).json(doc);
+   });
+});
+
 app.listen(port, () => {
     console.log(`Listen on ${port}`);
 })
