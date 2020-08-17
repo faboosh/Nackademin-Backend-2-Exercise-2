@@ -38,6 +38,16 @@ app.post('/addPost', (req, res) => {
     });
 });
 
+app.put('/updatePost/:postId', (req, res) => {
+    Post.findByIdAndUpdate(req.params.postId, { "title": req.body.title, "content": req.body.content}, {useFindAndModify: false, versionKey: false},(err, doc) => {
+        if (err) {
+            res.status(500).json(err);
+            return;
+        }
+        res.status(200).json(doc);
+    });
+});
+
 app.listen(port, () => {
     console.log(`Listen on ${port}`);
 })
