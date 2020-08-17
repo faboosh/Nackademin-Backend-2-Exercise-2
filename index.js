@@ -19,7 +19,14 @@ mongoose.connect(uri,  {useNewUrlParser: true, useUnifiedTopology: true});
 const Post = mongoose.model('post', {
     title: String,
     content: String,
-    comments: Array
+    comments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "comment"
+    }]
+});
+
+const Comment = mongoose.model('comment', {
+    comment: String,
 });
 
 /**
@@ -57,6 +64,28 @@ app.delete('/deletePost/:postId', (req, res) => {
        res.status(200).json(doc);
    });
 });
+
+app.post('/addComment/:postId', (req, res) => {
+    Post.findById(req.params.postId, (err, postDoc) => {
+        if (err) {
+            res.status(500).json(err);
+            return;
+        }
+        Comment.create(req.body.comment, (err, commentDoc) => {
+            if (err) {
+                res.status(500).json(err);
+                return;
+            }
+            commentDoc.comments = req.body.comment;
+            commentDoc.save();
+            postDoc.comments.push(commentDoc);
+            postDoc.save();
+            res.status(201).json(postDoc);
+        });
+    });
+});
+
+
 
 app.listen(port, () => {
     console.log(`Listen on ${port}`);
