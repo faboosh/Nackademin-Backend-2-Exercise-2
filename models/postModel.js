@@ -23,5 +23,11 @@ module.exports = {
                 if(err) return false;
                 return document.deletedCount;
             });
+    },
+    getPosts: async() => {
+        return await Post.find({}, {'title': 1, 'content': 1});
+    },
+    getPost: async(postId) => {
+        return await Post.findOne({_id: postId}, {'title': 1, 'content': 1});
     }
 }
