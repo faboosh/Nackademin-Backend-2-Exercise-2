@@ -30,4 +30,9 @@ module.exports = {
             new: true
         });
     },
+    getCommentsByCommentIdsArray: async (commentIds) => {
+        return await Comment.find({
+            _id: { $in: commentIds}
+        })
+    }
 }

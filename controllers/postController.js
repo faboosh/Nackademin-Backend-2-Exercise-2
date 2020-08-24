@@ -30,6 +30,7 @@ module.exports = {
     getAllComments: async(req, res) => {
         let postId = req.params.postId;
         let commentIds = await postModel.getPostCommentsIds(postId);
-        res.json(commentIds)
+        let comments = await commentModel.getCommentsByCommentIdsArray(commentIds);
+        res.json(comments)
     },
 }
