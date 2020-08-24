@@ -1,4 +1,5 @@
 const postModel = require('../models/postModel');
+const commentModel = require('../models/commentModel');
 
 module.exports = {
     addPost: async (req, res) => {
@@ -19,5 +20,16 @@ module.exports = {
     getPosts: async (req, res) => {
         let posts = await postModel.getPosts()
         res.json({posts})
+    },
+
+    getPost: async (req, res) => {
+        let postId = req.params.postId;
+        let post = await postModel.getPost(postId)
+        res.json({post});
+    },
+    getAllComments: async(req, res) => {
+        let postId = req.params.postId;
+        let commentIds = await postModel.getPostCommentsIds(postId);
+        res.json(commentIds)
     },
 }

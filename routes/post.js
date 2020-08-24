@@ -1,19 +1,16 @@
 const router = require('express').Router();
 const postController = require('../controllers/postController');
 
-router.get('/', (req, res ) => {
-    postController.getPosts(req, res);
-})
+router.get('/', postController.getPosts);
 
-router.post('/add', (req, res) => {
-    postController.addPost(req, res);
-});
-router.put('/update/:postId', (req, res) => {
-    postController.updatePost(req, res);
-});
+router.get('/:postId', postController.getPost);
 
-router.delete('/delete/:postId', (req, res) => {
-    postController.deletePost(req, res);
-});
+router.post('/', postController.addPost);
+
+router.patch('/:postId', postController.updatePost);
+
+router.delete('/:postId', postController.deletePost);
+
+router.get('/:postId/comments', postController.getAllComments);
 
 module.exports = router

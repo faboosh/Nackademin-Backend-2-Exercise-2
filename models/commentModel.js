@@ -2,7 +2,6 @@ const {Post, Comment} = require('../database/mongodb');
 
 module.exports = {
     insertComment: async (postId, text) => {
-
         return await Post.findById(postId)
             .then(async (postDoc, err) => {
                 if (err) return false;
@@ -16,5 +15,19 @@ module.exports = {
                        return comDoc;
                     });
             });
+    },
+    getComments: async() => {
+        return await Comment.find({},{});
+    },
+    getComment: async(commentId) => {
+        return await Comment.find({_id: commentId},{});
+    },
+    deleteComment: async(commentId) => {
+        return await Comment.findOneAndDelete({_id: commentId});
+    },
+    updateComment: async(commentId, object) => {
+        return await Comment.findOneAndUpdate({_id: commentId},object, {
+            new: true
+        });
     },
 }
