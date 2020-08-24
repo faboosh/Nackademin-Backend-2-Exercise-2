@@ -13,5 +13,23 @@ module.exports = {
     }),
     Comment: mongoose.model('comment', {
         text: String,
-    })
+    }),
+    User: mongoose.model('user', {
+        username: {
+            type: String,
+            required: true
+        },
+        firstname: {
+            type: String,
+            required: true
+        },
+        surname: {
+            type: String,
+            required: true
+        },
+        passwordHash: {
+            type: String,
+            required: true
+        }
+    }),
 }
