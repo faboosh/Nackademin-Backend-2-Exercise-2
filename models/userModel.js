@@ -1,5 +1,6 @@
 const {User} = require('../database/mongodb');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 class UserExistsError extends Error {
     constructor(message) {
@@ -15,7 +16,7 @@ class userModel {
     }
 
     async getUserByUsername(username) {
-        return await User.find({username: username});
+        return await User.findOne({username: username});
     }
 
     async userExists(username) {
@@ -24,6 +25,14 @@ class userModel {
             return true;
         }
         return false;
+    }
+
+    async verifyPassword(password, passwordHash){
+        return bcrypt.compareSync(password, passwordHash);
+    }
+
+    async createToken(payload) {
+        return await jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: process.env.JWT_EXPIRES_IN});
     }
 
     async addUser(requestBody) {
