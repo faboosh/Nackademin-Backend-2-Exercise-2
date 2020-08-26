@@ -3,18 +3,21 @@ const commentModel = require('../models/commentModel');
 
 module.exports = {
     addPost: async (req, res) => {
-        let lastId = await postModel.insertPost(req.body.title, req.body.content);
+        let lastId = await postModel.insertPost(req.body.title, req.body.content, req.userId);
         let status = lastId ? 201 : 500;
         res.status(status).json({last_inserted_id: lastId});
     },
     updatePost: async (req, res) => {
-        let lastId = await postModel.updatePost(req.body.title, req.body.content, req.params.postId)
-        let status = lastId ? 201 : 500;
+        const { title, content } = req.body;
+        const { postId } = req.params;
+        const { userId } = req;
+        let lastId = await postModel.updatePost({title, content, postId, owner: userId});
+        let status = lastId ? 200 : 401;
         res.status(status).json({last_inserted_id: lastId});
     },
     deletePost: async (req, res) => {
-        let count = await postModel.deletePost(req.params.postId)
-        let status = count ? 201 : 500;
+        let count = await postModel.deletePost({_id: req.params.postId, owner: req.userId})
+        let status = count ? 200 : 401;
         res.status(status).json({removed_count: count});
     },
     getPosts: async (req, res) => {

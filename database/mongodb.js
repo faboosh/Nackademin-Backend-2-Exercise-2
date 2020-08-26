@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
-const uri = `mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@${process.env.HOST}/${process.env.DATABASE}`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.PASSWORD}@${process.env.HOST}/${process.env.DATABASE}`;
 mongoose.connect(uri,  {useNewUrlParser: true, useUnifiedTopology: true});
 
 module.exports = {
     Post: mongoose.model('post', {
         title: String,
         content: String,
+        owner: String,
         comments: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: "comment"
@@ -13,6 +14,7 @@ module.exports = {
     }),
     Comment: mongoose.model('comment', {
         text: String,
+        owner: String
     }),
     User: mongoose.model('user', {
         username: {
@@ -30,6 +32,10 @@ module.exports = {
         passwordHash: {
             type: String,
             required: true
+        },
+        groups: {
+            type: Array,
+            default: ['user']
         }
     }),
 }

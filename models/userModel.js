@@ -48,8 +48,9 @@ class userModel {
             "firstname": requestBody.firstname,
             "surname": requestBody.surname
         }
-        let result = await User.create(userObject);
-        return result;
+        let { _id, firstname, surname, groups } = await User.create(userObject);
+
+        return { _id, firstname, surname, groups };
     }
 }
 

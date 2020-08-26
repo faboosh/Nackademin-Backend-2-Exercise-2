@@ -4,7 +4,8 @@ const postRoute = require('./routes/post');
 const comRoute = require('./routes/comment');
 const frondEnd = require('./routes/frontend');
 const authRoute = require('./routes/auth');
-const path = require('path')
+const path = require('path');
+const cors = require('cors');;
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -18,16 +19,17 @@ function verifyJWT(req, res, next) {
     const token = req.headers.authorization.replace("Bearer ", "");
     try {
         const payload = jwt.verify(token, process.env.JWT_SECRET)
-        req.userId = payload;
+        req.userId = payload.userId;
         next();
     } catch(error) {
         res.sendStatus(403);
     }
-
 }
+
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
-app.use(express.static('./public'))
+app.use(express.static('./public'));
+app.use(cors());
 
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
@@ -36,8 +38,8 @@ app.set('view engine', 'ejs')
  * Routes
  */
 
-app.use('/posts', verifyJWT, postRoute);
-app.use('/comments', verifyJWT, comRoute);
+app.use('/posts', postRoute);
+app.use('/comments', comRoute);
 app.use('/', frondEnd);
 app.use('/auth', authRoute);
 

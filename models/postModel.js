@@ -1,48 +1,48 @@
 const {Post} = require('../database/mongodb');
 
 class postModel {
-    async insertPost(title, content) {
-        return await Post.create({
-            title: title,
-            content: content
-        }).then((document, err) => {
-            if (err) return false;
-            return document._id;
-        });
+    async insertPost(title, content, owner) {
+        try {
+            const document = await Post.create({
+                title: title,
+                content: content,
+                owner
+            })
+
+            return document ? document._id : false;
+        } catch(err) {
+            console.error(err);
+            return false;
+        }
     }
 
-    async updatePost(title, content, postId) {
-        return await Post.findByIdAndUpdate(postId, {"title": title, "content": content}, {
-            useFindAndModify: false,
-            versionKey: false
-        })
-            .then((document, err) => {
-                if (err) return false;
-                return document._id;
+    async updatePost({title, content, postId, owner}) {
+        try {
+            const document = await Post.findOneAndUpdate({_id: postId, owner}, {"title": title, "content": content}, {
+                useFindAndModify: false,
+                versionKey: false
             });
+
+            return document ? document._id : false;
+        } catch(err) {
+            console.error(err);
+            return false;
+        }
     }
 
-    async updatePost(title, content, postId) {
-        return await Post.findByIdAndUpdate(postId, {"title": title, "content": content}, {
-            useFindAndModify: false,
-            versionKey: false
-        })
-            .then((document, err) => {
-                if (err) return false;
-                return document._id;
-            });
-    }
+    async deletePost({postId, owner}) {
+        try {
+            const document = await Post.deleteOne({_id: postId, owner})
 
-    async deletePost(postId) {
-        return await Post.deleteOne({_id: postId})
-            .then((document, err) => {
-                if (err) return false;
-                return document.deletedCount;
-            });
+            return document ? document._id : false;
+        } catch(err) {
+            console.error(err);
+            return false;
+        }
     }
 
     async getPosts() {
-        return await Post.find({}, {'title': 1, 'content': 1, 'comments': 1});
+        return await Post.find({}, {'title': 1, 'content': 1, 'comments': 1, 'owner': 1});
     }
 
     async getPost(postId) {
