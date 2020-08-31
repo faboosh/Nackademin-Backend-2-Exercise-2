@@ -53,6 +53,10 @@ class postModel {
         let post = await this.getPost(postId);
         return post.comments;
     }
+
+    async Count() {
+        return await Post.count()
+    }
 }
 
 module.exports = new postModel();
