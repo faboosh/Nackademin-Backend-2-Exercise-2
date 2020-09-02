@@ -21,7 +21,6 @@ describe('My RESTful resource', () => {
         let payload = {
             userId: user._id
         }
-        // console.log(user)
         this.currentTest.token = await userModel.createToken(payload)
     })
     it('should login in and create post', async function () {
@@ -29,7 +28,6 @@ describe('My RESTful resource', () => {
             title: 'test',
             content: 'testing test content'
         }
-        console.log(this.test.token)
         request(app)
             .post('/posts')
             .set('authorization', `Bearer ${this.test.token}`)
@@ -37,7 +35,7 @@ describe('My RESTful resource', () => {
             .send(postData)
             .end(function (err, res) {
                 if (err) {
-                    // console.log(err)
+                    console.log(err)
                 } else {
                     // console.log(res)
                     expect(res).to.have.status(201)
