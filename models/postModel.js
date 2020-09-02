@@ -1,7 +1,7 @@
 const {Post} = require('../database/mongodb');
 
 class postModel {
-    async insertPost(title, content, owner) {
+    async insertPost({title, content, owner}) {
         try {
             const document = await Post.create({
                 title: title,
@@ -41,8 +41,10 @@ class postModel {
         }
     }
 
-    async getPosts() {
-        return await Post.find({}, {'title': 1, 'content': 1, 'comments': 1, 'owner': 1});
+    async getPosts({query}) {
+        let findObj = {};
+        if(query) findObj = { title: { $regex: new RegExp(query, 'i') } }
+        return await Post.find(findObj, {'title': 1, 'content': 1, 'comments': 1, 'owner': 1});
     }
 
     async getPost(postId) {
@@ -52,6 +54,17 @@ class postModel {
     async getPostCommentsIds(postId) {
         let post = await this.getPost(postId);
         return post.comments;
+    }
+
+    async clearPosts() {
+        return await Post.deleteMany({});
+    }
+
+    async count(){
+
+        let result = await Post.find({})
+        console.log("count i postModel", result.length)
+        return result.length
     }
 }
 

@@ -24,7 +24,7 @@ class userModel {
         if(result) {
             return true;
         }
-        return false;
+        return false; 
     }
 
     async verifyPassword(password, passwordHash){
@@ -52,6 +52,9 @@ class userModel {
 
         return { _id, firstname, surname, groups };
     }
+
+
+    
 }
 
 module.exports = new userModel();

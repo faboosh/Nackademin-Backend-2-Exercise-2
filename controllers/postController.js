@@ -20,8 +20,10 @@ module.exports = {
         let status = count ? 200 : 401;
         res.status(status).json({removed_count: count});
     },
+    
     getPosts: async (req, res) => {
-        let posts = await postModel.getPosts()
+        console.log(req.query);
+        let posts = await postModel.getPosts({query: req.query.query})
         res.json({posts})
     },
 
