@@ -13,8 +13,8 @@ module.exports = {
         }]
     }),
     Comment: mongoose.model('comment', {
-        text: String,
-        owner: String
+        text: { type: String },
+        owner: { type: String, default:'Pat' },
     }),
     User: mongoose.model('user', {
         username: {

@@ -55,7 +55,18 @@ class postModel {
     }
 
     async Count() {
-        return await Post.count()
+        return await Post.countDocuments()
+    }
+
+    async getPostOwner(id) {
+        return await Post.find({owner: id});
+    }
+
+    async getPostByQuery(query) {
+        return await Post.find({$and: [
+            {title: query.title},
+            {content: query.content}
+        ]})
     }
 }
 
