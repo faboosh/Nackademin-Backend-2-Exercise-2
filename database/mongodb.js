@@ -6,7 +6,7 @@ module.exports = {
     Post: mongoose.model('post', {
         title: String,
         content: String,
-        owner: String,
+        owner: { type: String, default:'nobody' },
         comments: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: "comment"

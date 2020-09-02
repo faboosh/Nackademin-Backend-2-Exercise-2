@@ -8,7 +8,6 @@ const path = require('path');
 const cors = require('cors');;
 
 const app = express();
-const port = process.env.PORT || 8080;
 const jwt = require('jsonwebtoken');
 
 /**
@@ -44,6 +43,4 @@ app.use('/', frondEnd);
 app.use('/auth', authRoute);
 
 
-app.listen(port, () => {
-    console.log(`Listening on ${port}`);
-})
+module.exports = app
